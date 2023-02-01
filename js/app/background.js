@@ -1,3 +1,4 @@
+/* eslint-disable object-shorthand */
 /* global chrome */
 
 function openWindow () {
