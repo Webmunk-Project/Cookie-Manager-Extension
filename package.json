@@ -1,0 +1,22 @@
+{
+  "name": "modular-browser-extension",
+  "version": "1.0.0",
+  "description": "Framework for building modular browser extensions.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "private": true,
+  "author": "Chris J. Karr",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "eslint": "^8.25.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.1.0"
+  },
+  "dependencies": {
+  	"cookie-ui": "file:modules/cookie-ui"
+  }
+}

@@ -1,0 +1,12 @@
+[submodule "modules/ad-scraper"]
+	path = modules/ad-scraper
+	url = git@github.com:audacious-software/Extension-Ads-Module.git
+[submodule "modules/cookie-ui"]
+	path = modules/cookie-ui
+	url = git@github.com:audacious-software/Cookie-UI-Module.git
+[submodule "modules/cookies"]
+	path = modules/cookies
+	url = git@github.com:audacious-software/Extension-Cookie-Module.git
+[submodule "modules/background-fetch"]
+	path = modules/background-fetch
+	url = git@github.com:audacious-software/Extension-Background-Fetch-Module.git

@@ -1,0 +1,10 @@
+{
+    "extends": "standard",
+    "env": {
+        "amd": true,
+        "jquery": true
+    },
+    "root": true,
+    "ignorePatterns": ["**/autoconsent/**"]
+}
+
