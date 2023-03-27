@@ -3,7 +3,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<link rel="icon" href="images/icon-48.png">
-		<title>Extensible Test Extension</title>
+		<title>Cookie Manager</title>
 		<link rel="stylesheet" href="vendor/css/material-components-web.css">
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,7 +11,7 @@
 		<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet"> 
 		<style>
 			:root {
-				--mdc-theme-primary: #616161;
+				--mdc-theme-primary: #A51C30;
 			}
 
 			.rules-error {
@@ -30,20 +30,138 @@
 			<div class="mdc-top-app-bar__row">
 				<section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
 				    <img src="images/header-icon-96.png" style="height: 100%;">
-					<span class="mdc-top-app-bar__title" id="extensionTitle" style="padding-left: 8px;">Extensible Test Extension</span>
+					<span class="mdc-top-app-bar__title" id="extensionTitle" style="padding-left: 8px;">Cookie Manager</span>
 				</section>
 				<section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end" role="toolbar">
+					<button class="material-icons mdc-top-app-bar__action-item mdc-icon-button toolbar-button main-ui-button-off" aria-label="UploadData" id="actionUploadData" aria-describedby="actionUploadDataTooltip">cloud_upload</button>
+					<div id="actionUploadDataTooltip" class="mdc-tooltip" role="tooltip" aria-hidden="true">
+						<div class="mdc-tooltip__surface mdc-tooltip__surface-animation">
+							Upload Data
+						</div>
+					</div>
+
+					<button class="material-icons mdc-top-app-bar__action-item mdc-icon-button toolbar-button main-ui-button-off" aria-label="Reload Rules" id="actionReloadRules" aria-describedby="actionReloadRulesTooltip">refresh</button>
+					<div id="actionReloadRulesTooltip" class="mdc-tooltip" role="tooltip" aria-hidden="true">
+						<div class="mdc-tooltip__surface mdc-tooltip__surface-animation">
+							Refresh Rules
+						</div>
+					</div>
+					
+					<button class="material-icons mdc-top-app-bar__action-item mdc-icon-button toolbar-button main-ui-button-off" aria-label="Inspect Rules" id="actionInspectRules" aria-describedby="actionInspectRulesTooltip">rule</button>
+					<div id="actionInspectRulesTooltip" class="mdc-tooltip" role="tooltip" aria-hidden="true">
+						<div class="mdc-tooltip__surface mdc-tooltip__surface-animation">
+							Inspect Rules
+						</div>
+					</div>
+					
+					<button class="material-icons mdc-top-app-bar__action-item mdc-icon-button toolbar-button main-ui-button-off" aria-label="Open Settings" id="actionOpenSettings" aria-describedby="actionOpenSettingsTooltip">settings</button>
+					<div id="actionOpenSettingsTooltip" class="mdc-tooltip" role="tooltip" aria-hidden="true">
+						<div class="mdc-tooltip__surface mdc-tooltip__surface-animation">
+							Open Settings
+						</div>
+					</div>
+
+					<button class="material-icons mdc-top-app-bar__action-item mdc-icon-button toolbar-button settings-button inspect-rules-button" aria-label="Close" id="actionCloseScreen" aria-describedby="actionCloseScreenTooltip">close</button>
+					<div id="actionCloseScreenTooltip" class="mdc-tooltip" role="tooltip" aria-hidden="true">
+						<div class="mdc-tooltip__surface mdc-tooltip__surface-animation">
+							Close
+						</div>
+					</div>
 				</section>
 			</div>
 		</header>
 		<div class="mdc-top-app-bar--fixed-adjust">
-    		<div id="detailsScreen" class="page-panel">
+    		<div id="loginScreen" class="page-panel" style="display: none;">
 				<div class="mdc-layout-grid">
 					<div class="mdc-layout-grid__inner">
 						<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
-							<div class="mdc-typography--subtitle2">About This Extension</div>
-							<p class="mdc-typography--body1">Welcome to the Extensible Test Extension.</p>
-							<p class="mdc-typography--body1">Most of the interesting stuff happens under the hood, so open up your <code>Inspect</code> view to see more.</p>
+							<p class="mdc-typography--body1">Please enter your e-mail address to get started:</p>
+				
+							<div class="mdc-text-field mdc-text-field--outlined" id="field_identifier" style="width: 100%;">
+								<input type="email" id="identifier" class="mdc-text-field__input">
+								<div class="mdc-notched-outline">
+									<div class="mdc-notched-outline__leading"></div>
+										<div class="mdc-notched-outline__notch">
+										<label for="tf-outlined" class="mdc-floating-label">E-Mail Address</label>
+									</div>
+									<div class="mdc-notched-outline__trailing"></div>
+								</div>
+							</div>
+				
+							<div style="margin-top: 32px; margin-bottom: 16px; text-align: right;">
+								<button class="mdc-button mdc-button--raised" id="submitIdentifier">
+									<i class="material-icons mdc-button__icon" aria-hidden="true">arrow_forward</i>
+									<span class="mdc-button__label">Continue</span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+    		<div id="detailsScreen" class="page-panel" style="display: none;">
+				<div class="mdc-layout-grid">
+					<div class="mdc-layout-grid__inner">
+						<div class="mdc-layout-grid__cell">
+							<div class="mdc-typography--subtitle2">Identifier</div>
+							<div class="mdc-typography--body1" id="valueIndentifier">Unknown</div>
+						</div>
+						<div class="mdc-layout-grid__cell">
+							<div class="mdc-typography--subtitle2">Last Upload</div>
+							<div class="mdc-typography--body1" id="valueLastUpload">Loading&#8230;</div>
+						</div>
+						<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" id="mainDescription">
+							<div class="mdc-typography--subtitle2">Description</div>
+							<div class="mdc-typography--body1" id="valueDescription">Loading&#8230;</div>
+						</div>
+						<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12" id="mainTasks">
+							<div class="mdc-typography--subtitle2" id="pendingTasksTitle">Pending Tasks</div>
+							<div class="mdc-typography--body1" id="valueTasks">Loading&#8230;</div>
+						</div>
+					</div>
+				</div>
+    		</div>
+
+    		<div id="rulesScreen" class="page-panel" style="display: none; height: 100%;">
+				<div class="mdc-layout-grid" id="rulesDefinitionJsonFrame">
+					<div class="mdc-layout-grid__inner">
+						<label class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12 mdc-text-field mdc-text-field--outlined mdc-text-field--textarea" id="rulesDefinitionJson" style="width: auto;">
+							<span class="mdc-notched-outline">
+								<span class="mdc-notched-outline__leading"></span>
+								<span class="mdc-notched-outline__notch">
+									<span class="mdc-floating-label" id="my-label-id">Rules JSON</span>
+								</span>									
+								<span class="mdc-notched-outline__trailing"></span>
+							</span>
+							<span class="mdc-text-field__resizer">
+								<textarea class="mdc-text-field__input" aria-label="Rules JSON" style="white-space: pre; overflow: auto; margin-bottom: 0px; font-family: 'Roboto Mono', monospace;"></textarea>
+							</span>
+						</label>
+					</div>
+				</div>
+				<div class="mdc-layout-grid" id="rulesScreenStatus" style="background-color: #F5F5F5; border-top: 1px solid #E0E0E0; position: absolute: bottom: 0; padding: 8px;">
+					<div class="mdc-layout-grid__inner">
+						<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+							<div id="rulesJsonState" class="mdc-typography--caption">(Rule state)</div>
+						</div>
+						<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+							<div id="rulesCount" class="mdc-typography--caption">(Rule count)</div>
+						</div>
+						<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+							<div id="cssCount" class="mdc-typography--caption">(CSS count)</div>
+						</div>
+						<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-3">
+							<div id="actionsCount" class="mdc-typography--caption">(Action count)</div>
+						</div>
+					</div>
+				</div>
+    		</div>
+
+    		<div id="settingsScreen" class="page-panel" style="display: none;">
+				<div class="mdc-layout-grid">
+					<div class="mdc-layout-grid__inner">
+						<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+							<div class="mdc-typography--subtitle2">About Cookie Manager</div>
+							<div class="mdc-typography--body2" id="valueAboutExtension">-</div>
 						</div>
 					</div>
 				</div>
@@ -66,6 +184,39 @@
 			</div>
 			<div class="mdc-dialog__scrim"></div>
 		</div>
+
+		<div class="mdc-dialog" id="upload_data_dialog" role="alertdialog" aria-modal="true" aria-labelledby="upload-data-dialog-title" aria-describedby="dialog-content">
+			<div class="mdc-dialog__container">
+				<div class="mdc-dialog__surface">
+					<h2 class="mdc-dialog__title" id="upload-data-dialog-title">Uploading data</h2>
+					<div class="mdc-dialog__content" id="upload-data-dialog-content">
+						<div role="progressbar" class="mdc-linear-progress" aria-label="Upload Progress" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0" id="upload-data-dialog-progress">
+							<div class="mdc-linear-progress__buffer">
+								<div class="mdc-linear-progress__buffer-bar"></div>
+								<div class="mdc-linear-progress__buffer-dots"></div>
+							</div>
+							<div class="mdc-linear-progress__bar mdc-linear-progress__primary-bar">
+								<span class="mdc-linear-progress__bar-inner"></span>
+							</div>
+							<div class="mdc-linear-progress__bar mdc-linear-progress__secondary-bar">
+								<span class="mdc-linear-progress__bar-inner"></span>
+							</div>
+						</div>
+						<div id="upload-data-dialog-message" style="padding-top: 8px;"></div>
+					</div>
+					<!-- <footer class="mdc-dialog__actions">
+						<button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="close" style="float: left;">
+							<span class="mdc-button__label">Close</span>
+						</button>
+						<button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="delete">
+							<span class="mdc-button__label">Delete Pattern</span>
+						</button>
+					</footer> -->
+				</div>
+			</div>
+			<div class="mdc-dialog__scrim"></div>
+		</div>
+
 		<script src="vendor/js/nacl.js"></script>
 		<script src="vendor/js/nacl-util.js"></script>
 		<script data-main="js/app/main.js" src="vendor/js/require.js"></script>

@@ -2,9 +2,10 @@ const configFunction = function () {
   return {
     primaryColor: '#616161',
     accentColor: '#616161',
-    extensionName: 'Extensible Test Extension',
-    generator: 'test-extension',
-    aboutExtension: 'Minimalist extension for testing other extensions.'
+    extensionName: 'Cookie Manager',
+    generator: 'cookie-manager',
+    aboutExtension: 'Unified cookie interface for research.',
+    enrollUrl: 'https://cookie-enroll.webmunk.org/enroll/enroll.json'
   }
 }
 

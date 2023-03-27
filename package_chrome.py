@@ -121,6 +121,9 @@ with zipfile.ZipFile('chrome-extension.zip', mode='w') as extension_zip:
             else:
                 content_lines.append(line)
 
+        content_lines.append('\n')
+        content_lines.append('\n')
+
     extension_zip.writestr('js/app/content-script.js', ''.join(content_lines))
 
     if args.get('dir', False):

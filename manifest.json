@@ -1,5 +1,5 @@
 {
-  "name": "Cookie Manager Extension", 
+  "name": "Cookie Manager", 
   "short_name": "Cookie Manager", 
   "icons": {
       "256": "images/icon-256.png", 
@@ -12,7 +12,7 @@
   "background": {
     "service_worker": "js/app/background_loader.js"
   }, 
-  "version": "0.10", 
+  "version": "0.15", 
   "manifest_version": 3, 
   "action": {
     "default_icon": {
@@ -34,7 +34,7 @@
   ],
   "modules": [
   	"modules/ad-scraper",
-  	"modules/background-fetch",
+  	"modules/search-mirror",
   	"modules/cookie-ui",
   	"modules/cookies"
   ]
