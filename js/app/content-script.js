@@ -47,12 +47,12 @@
 
     const imageRequest = new Request(url)
 
-    let mimeType = 'application/octet-stream'
+    let fileExtension = '.bin'
 
     fetch(imageRequest)
       .then((response) => {
         if (!response.ok) {
-          console.log('[Search Mirror] Unable to retrieve image URL: ' + url)
+          console.log('[Cookie Manager] Unable to retrieve image URL: ' + url)
 
           complete()
 
@@ -62,13 +62,13 @@
         return response.blob()
       })
       .then((responseBlob) => {
-        mimeType = responseBlob.type.split('/')[1]
+        fileExtension = responseBlob.type.split('/')[1]
 
         return responseBlob
       })
       .then(blobToBase64)
       .then((response) => {
-        const filename = slugify(title) + '.' + mimeType
+        const filename = slugify(title) + '.' + fileExtension
 
         const fullResponse = response.replace(';base64', ';name=' + filename + ';base64')
 
