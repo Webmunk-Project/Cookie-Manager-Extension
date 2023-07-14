@@ -3,16 +3,19 @@
 	url = https://github.com/audacious-software/Extension-Ads-Module.git
 [submodule "modules/cookie-ui"]
 	path = modules/cookie-ui
-	url = https://github.com/audacious-software/Cookie-UI-Module.git
+	url = https://github.com/Webmunk-Project/Cookie-UI-Module.git
 [submodule "modules/cookies"]
 	path = modules/cookies
-	url = https://github.com/audacious-software/Extension-Cookie-Module.git
+	url = https://github.com/Webmunk-Project/Extension-Cookie-Module.git
 [submodule "modules/background-fetch"]
 	path = modules/background-fetch
-	url = https://github.com/audacious-software/Extension-Background-Fetch-Module.git
+	url = https://github.com/Webmunk-Project/Extension-Background-Fetch-Module.git
 [submodule "modules/screenshot"]
 	path = modules/screenshot
-	url = https://github.com/audacious-software/Screenshot-Module.git
+	url = https://github.com/Webmunk-Project/Screenshot-Module.git
 [submodule "modules/search-mirror"]
 	path = modules/search-mirror
-	url = https://github.com/audacious-software/Search-Mirror-Module.git
+	url = https://github.com/Webmunk-Project/Search-Mirror-Module.git
+[submodule "modules/quick-survey"]
+	path = modules/quick-survey
+	url = https://github.com/Webmunk-Project/Quick-Survey-Module.git
