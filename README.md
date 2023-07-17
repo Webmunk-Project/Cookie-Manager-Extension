@@ -82,7 +82,7 @@ This module incorporates a modified build of DuckDuckGo's AutoConsent engine in 
     }
   }
 ```
-This configuration hides native cookie UI elements as soon as possible (`enable-prehide`) and will not take any automatic action on behalf of the user (`auto-action`). It always displays a cookie pop-up on sites that set cookies (`always-display-ui`) and visits to the `example.com` domain will override the built-in UI randomization (`ui-configuration-override) to always show an interface with just an "Accept" and "Reject" button.
+This configuration hides native cookie UI elements as soon as possible (`enable-prehide`) and will not take any automatic action on behalf of the user (`auto-action`). It always displays a cookie pop-up on sites that set cookies (`always-display-ui`) and visits to the `example.com` domain will override the built-in UI randomization (`ui-configuration-override`) to always show an interface with just an "Accept" and "Reject" button.
 
 This module reports to the data server a series of events describing the user action taken in choosing their per-site cookie preferences.
 
