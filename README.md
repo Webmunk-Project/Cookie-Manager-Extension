@@ -4,8 +4,11 @@ Cookie Manager is a Chrome Manifest V3 extension that implements an experimental
 
 ## Cloning from our repo and installing packages
 ```git clone https://github.com/Webmunk-Project/Cookie-Manager-Extension.git```
+
 ```git submodule init```
+
 ```git submodule update```
+
 ```npm install```
 
 ## Building Cookie Manager
