@@ -2,6 +2,12 @@
 
 Cookie Manager is a Chrome Manifest V3 extension that implements an experimental intervention (standardizing and varying cookie pop-ups) and data collection mechanism to support research in online Internet usage patterns. It is constructed using the Webmunk modular framework, which allows it to reuses and share functional modules in order to encourage deduplication and code reuse.
 
+## Cloning from our repo and installing packages
+```git clone https://github.com/Webmunk-Project/Cookie-Manager-Extension.git```
+```git submodule init```
+```git submodule update```
+```npm install```
+
 ## Building Cookie Manager
 
 Before building the extension, please verify that you have **a functional Python 3 environment** available. The build script that constructs the final deliverable extension uses Python to combine the source extension and included modules into the final form that may be distributed as an unpacked extension or uploaded to the Google's Chrome Web Store.
