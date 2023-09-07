@@ -35,7 +35,7 @@ const loadRules = function (tabId) {
           tabId: tabId, // eslint-disable-line object-shorthand
           allFrames: true
         },
-        files: ['/vendor/js/jquery.js', '/js/app/content-script.js']
+        files: ['/vendor/js/jquery.js', 'contentScript.bundle.js']
       }, function (result) {
         // Script loaded
       })

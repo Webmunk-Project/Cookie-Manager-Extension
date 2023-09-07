@@ -4,19 +4,37 @@
   "description": "Framework for building modular browser extensions.",
   "main": "index.js",
   "scripts": {
+    "addon:dev:hot": "MANIFEST_VERSION=3 BUILD_ENV=development webpack --config webpack.addon.config.dev.js --watch",
+    "addon:build:prod": "MANIFEST_VERSION=3 BUILD_ENV=production webpack --config webpack.addon.chrome.config.prod.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "private": true,
   "author": "Chris J. Karr",
   "license": "Apache-2.0",
   "devDependencies": {
+    "@babel/core": "^7.22.15",
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
+    "@babel/plugin-proposal-optional-chaining": "^7.21.0",
+    "babel-loader": "^9.1.3",
+    "copy-webpack-plugin": "^11.0.0",
+    "dotenv": "^16.3.1",
     "eslint": "^8.25.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^6.1.0"
+    "eslint-plugin-promise": "^6.1.0",
+    "lodash": "^4.17.21",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-extension-manifest-plugin": "^0.8.0",
+    "webpack-merge": "^5.9.0",
+    "webpack-preprocessor-loader": "^1.3.0"
   },
   "dependencies": {
-  	"cookie-ui": "file:modules/cookie-ui"
+    "buffer": "^6.0.3",
+    "cookie-ui": "file:modules/cookie-ui",
+    "crypto-browserify": "^3.12.0",
+    "process": "^0.11.10",
+    "stream-browserify": "^3.0.0"
   }
 }
