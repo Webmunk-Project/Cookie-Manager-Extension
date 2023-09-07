@@ -1,21 +1,10 @@
-/* global requirejs, chrome */
+import $ from 'jquery'
+import config from "./config";
 
-requirejs.config({
-  shim: {
-    jquery: {
-      exports: '$'
-    }
-  },
-  baseUrl: 'vendor/js'
-})
-
-define(['app/config', 'jquery'], function (config) {
-  const home = {}
-
-  home.validateIdentifier = function (identifier, success, error) {
+const home = {
+  validateIdentifier:function (identifier, success, error) {
     if (identifier === null || identifier === undefined || identifier.trim() === '') {
       error('E-Mail Required', 'Please enter an e-mail address to continue.')
-
       return
     }
 
@@ -51,6 +40,7 @@ define(['app/config', 'jquery'], function (config) {
       }
     })
   }
+};
 
-  return home
-})
+export default home
+

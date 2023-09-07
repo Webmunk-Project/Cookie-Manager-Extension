@@ -12,14 +12,14 @@ const manifestVersion = "3";
 module.exports = function config(browser){
   return {
     entry: {
-      background_loader: [
-        './js/app/config.js',
+      background: [
         './vendor/js/nacl.js',
         './vendor/js/nacl-util.js',
         './js/lib/passive-data-kit.js',
         './js/app/background.js'
       ].concat(buildScriptList(true)),
-      contentScript: ["./js/app/content-script.js"].concat(buildScriptList(false))
+      contentScript: ["./js/app/content-script.js"].concat(buildScriptList(false)),
+      main: ["./js/app/main.js"]
     },
     output: {
       path: path.join(__dirname, 'dist/'),
@@ -139,7 +139,9 @@ module.exports = function config(browser){
         patterns: [
           { from: './images', to: './images' },
           { from: './vendor', to: './vendor' },
+          { from: 'index.html', to: '.' },
           ...buildImageList(),
+          ...buildRulesList(),
         ]
       }),
       new webpack.EnvironmentPlugin({
@@ -155,12 +157,22 @@ module.exports = function config(browser){
           extend: {
             "name":baseManifest.name+"_"+(process.env.BUILD_ENV=="development"?"dev":""),
             "manifest_version":parseInt(manifestVersion),
+            "permissions": baseManifest.permissions.concat(buildPermissionsList("permissions")),
+            "host_permissions": baseManifest.host_permissions.concat(buildPermissionsList("host_permissions")),
             "modules": undefined
           }
         }
       })
     ]
   }
+}
+function buildPermissionsList(field){
+  let permissionsList = [];
+  baseManifest.modules.forEach(m => {
+    let moduleManifest = require("./"+m+"/module.json");
+    permissionsList = permissionsList.concat(moduleManifest[field])
+  });
+  return permissionsList;
 }
 // read files to be copied
 function buildImageList(){
@@ -174,6 +186,16 @@ function buildImageList(){
   });
   console.log("buildImageList",fileList)
   return fileList.map(f => { return {from: f,to:"./images"}})
+}
+function buildRulesList(){
+  let fileList = [];
+  baseManifest.modules.forEach(m => {
+    if (fs.existsSync(`./${m}/js/rules.json`)) {
+      fileList.push({from: `./${m}/js/rules.json`, to: `./${m}/js/rules.json`})
+    }
+  });
+  console.log("buildRulesList",fileList)
+  return fileList;
 }
 // read manifest file and process each module to be imported
 function buildScriptList(takeWorkerType){

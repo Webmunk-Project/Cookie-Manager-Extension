@@ -403,12 +403,5 @@ const pdkFunction = function () {
   return pdk
 }
 
-if (typeof define === 'undefined') {
-  if (typeof window !== 'undefined') {
-    window.PDK = pdkFunction()
-  } else {
-    PDK = pdkFunction() // eslint-disable-line no-global-assign, no-undef
-  }
-} else {
-  PDK = define(pdkFunction) // eslint-disable-line no-global-assign, no-undef
-}
+var pdk = pdkFunction()
+export default pdk;

@@ -1,3 +1,8 @@
+import config from "./config"
+import pdk from "../lib/passive-data-kit"
+
+self.PDK = pdk;
+
 /* global chrome, fetch */
 
 function openWindow () {
@@ -22,8 +27,6 @@ function openWindow () {
 chrome.action.onClicked.addListener(function (tab) {
   openWindow()
 })
-
-let config = null
 
 const loadRules = function (tabId) {
   chrome.storage.local.get({ 'cookie-manager-config': null }, function (result) {
@@ -55,6 +58,8 @@ function refreshConfiguration (sendResponse) {
 
     if (identifier !== undefined && identifier !== '') {
       chrome.storage.local.get({ 'cookie-manager-config': null }, function (result) {
+        console.log("config = ",config)
+
         config = result['cookie-manager-config']
 
         if (config['enroll-url'] === undefined) {
@@ -228,7 +233,7 @@ function handleMessage (request, sender, sendResponse) {
 
     return true
   } else if (request.content === 'nudge_data_points') {
-    window.PDK.enqueueDataPoint(null, null, function () {
+    self.PDK.enqueueDataPoint(null, null, function () {
       sendResponse({
         message: 'Data points nudged successfully.',
         success: true
@@ -242,7 +247,7 @@ function handleMessage (request, sender, sendResponse) {
     } else {
       console.log('[Cookie Manager] Recording ' + request.generator + ' data point...')
 
-      window.PDK.enqueueDataPoint(request.generator, request.payload, function () {
+      self.PDK.enqueueDataPoint(request.generator, request.payload, function () {
         console.log('[Cookie Manager] Recorded ' + request.generator + ' data point...')
 
         sendResponse({
@@ -302,13 +307,18 @@ const uploadAndRefresh = function (alarm) {
   console.log('[Cookie Manager] Uploading data and refreshing configuration...')
 
   chrome.storage.local.get({ 'cookie-manager-config': null }, function (result) {
-    config = result['cookie-manager-config']
+    console.log("config = ",config)
 
+    //config = result['cookie-manager-config']
+    for (p in result['cookie-manager-config']){
+      console.log("prop:"+p)
+      config[p] = result[p];
+    }
     console.log('[Cookie Manager] Uploading queued data points...')
 
-    window.PDK.persistDataPoints(function () {
+    self.PDK.persistDataPoints(function () {
       console.log('[Cookie Manager] Begin upload: ' + (new Date()) + ' -- ' + Date.now())
-      window.PDK.uploadQueuedDataPoints(config['upload-url'], config.key, null, function () {
+      self.PDK.uploadQueuedDataPoints(config['upload-url'], config.key, null, function () {
         chrome.storage.local.set({
           'pdk-last-upload': (new Date().getTime())
         }, function (result) {
@@ -325,11 +335,11 @@ chrome.alarms.onAlarm.addListener(uploadAndRefresh)
 
 const webmunkModules = []
 
-const registerCustomModule = function (callback) { // eslint-disable-line no-unused-vars
+self.registerCustomModule = function (callback) { // eslint-disable-line no-unused-vars
   webmunkModules.push(callback)
 }
 
-const registerMessageHandler = function (name, handlerFunction) { // eslint-disable-line no-unused-vars
+self.registerMessageHandler = function (name, handlerFunction) { // eslint-disable-line no-unused-vars
   handlerFunctions[name] = handlerFunction
 }
 

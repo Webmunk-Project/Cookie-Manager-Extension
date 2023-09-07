@@ -10,7 +10,7 @@ module.exports = {
   }, 
   "description": "Research extension to support browser cookie behavior.", 
   "background": {
-    "service_worker": "js/app/background.bundle.js"
+    "service_worker": "background.bundle.js"
   }, 
   "version": "0.15", 
   "manifest_version": 3, 
