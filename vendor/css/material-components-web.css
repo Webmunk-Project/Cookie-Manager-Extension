@@ -388,6 +388,7 @@
       -ms-user-select: none;
           user-select: none;
   -webkit-appearance: none;
+  appearance: none;
   overflow: visible;
   vertical-align: middle;
 }
@@ -2006,6 +2007,7 @@ svg.mdc-button__icon {
   outline: none;
   cursor: pointer;
   -webkit-appearance: none;
+  appearance: none;
   background: none;
 }
 .mdc-deprecated-chip-trailing-action .mdc-deprecated-chip-trailing-action__icon {
@@ -2240,6 +2242,7 @@ svg.mdc-button__icon {
   outline: none;
   cursor: pointer;
   -webkit-appearance: none;
+  appearance: none;
 }
 .mdc-chip .mdc-chip__ripple {
   border-radius: 16px;
@@ -6189,6 +6192,7 @@ svg.mdc-button__icon {
           user-select: none;
   -moz-appearance: none;
   -webkit-appearance: none;
+  appearance: none;
   overflow: visible;
   transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1), opacity 15ms linear 30ms, -webkit-transform 270ms 0ms cubic-bezier(0, 0, 0.2, 1);
   transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1), opacity 15ms linear 30ms, transform 270ms 0ms cubic-bezier(0, 0, 0.2, 1);
