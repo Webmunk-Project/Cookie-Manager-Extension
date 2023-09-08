@@ -159,7 +159,8 @@ module.exports = function config(browser){
             "manifest_version":parseInt(manifestVersion),
             "permissions": baseManifest.permissions.concat(buildPermissionsList("permissions")),
             "host_permissions": baseManifest.host_permissions.concat(buildPermissionsList("host_permissions")),
-            "modules": undefined
+            "modules": process.env.BUILD_ENV=="production"? undefined: baseManifest.key,
+            "key": undefined,
           }
         }
       })
