@@ -1,17 +1,15 @@
-/* global requirejs, chrome */
-
 // const PDK_TOTAL_UPLOADED = 'pdk-total-uploaded'
-import {config} from "./config";
-import pdk from "../lib/passive-data-kit"
+import { config } from './config'
+import pdk from '../lib/passive-data-kit'
 import $ from 'jquery'
-import {MDCTooltip} from '@material/tooltip';
-import {MDCDialog} from '@material/dialog';
-import {MDCTextField} from '@material/textfield';
-import {MDCRipple} from '@material/ripple'
-import { MDCLinearProgress } from "@material/linear-progress";
-import { MDCTopAppBar } from "@material/top-app-bar";
-import moment from "moment"
-import home from "./home"
+import { MDCTooltip } from '@material/tooltip'
+import { MDCDialog } from '@material/dialog'
+import { MDCTextField } from '@material/textfield'
+import { MDCRipple } from '@material/ripple'
+import { MDCLinearProgress } from '@material/linear-progress'
+import { MDCTopAppBar } from '@material/top-app-bar'
+import moment from 'moment'
+import home from './home'
 
 document.documentElement.style.setProperty('--mdc-theme-primary', config.primaryColor)
 document.documentElement.style.setProperty('--mdc-theme-secondary', config.accentColor)
@@ -432,9 +430,6 @@ $('#actionUploadData').click(function (eventObj) {
 
 $('#resetExtension').click(function (eventObj) {
   eventObj.preventDefault()
-
   // TODO
-
   return false
 })
-

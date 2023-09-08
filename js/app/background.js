@@ -1,7 +1,7 @@
-import {config, setConfig} from "./config"
-import pdk from "../lib/passive-data-kit"
+import { config, setConfig } from './config'
+import pdk from '../lib/passive-data-kit'
 
-self.PDK = pdk;
+self.PDK = pdk
 
 /* global chrome, fetch */
 
@@ -30,7 +30,7 @@ chrome.action.onClicked.addListener(function (tab) {
 
 const loadRules = function (tabId) {
   chrome.storage.local.get({ 'cookie-manager-config': null }, function (result) {
-    setConfig(result['cookie-manager-config']);
+    setConfig(result['cookie-manager-config'])
     if (config !== null && config !== undefined) {
       chrome.scripting.executeScript({
         target: {
@@ -57,8 +57,8 @@ function refreshConfiguration (sendResponse) {
 
     if (identifier !== undefined && identifier !== '') {
       chrome.storage.local.get({ 'cookie-manager-config': null }, function (result) {
-        console.log("config = ",config)
-        setConfig(result['cookie-manager-config']);
+        console.log('config = ', config)
+        setConfig(result['cookie-manager-config'])
 
         if (config['enroll-url'] === undefined) {
           config['enroll-url'] = 'https://cookie-enroll.webmunk.org/enroll/enroll.json'
@@ -224,7 +224,7 @@ const handlerFunctions = {}
 function handleMessage (request, sender, sendResponse) {
   if (request.content === 'fetch_configuration') {
     chrome.storage.local.get({ 'cookie-manager-config': null }, (result) => {
-      setConfig(result['cookie-manager-config']);
+      setConfig(result['cookie-manager-config'])
       sendResponse(config)
     })
 
@@ -304,8 +304,8 @@ const uploadAndRefresh = function (alarm) {
   console.log('[Cookie Manager] Uploading data and refreshing configuration...')
 
   chrome.storage.local.get({ 'cookie-manager-config': null }, function (result) {
-    console.log("config = ",config)
-    setConfig(result['cookie-manager-config']);
+    console.log('config = ', config)
+    setConfig(result['cookie-manager-config'])
     console.log('[Cookie Manager] Uploading queued data points...')
 
     self.PDK.persistDataPoints(function () {

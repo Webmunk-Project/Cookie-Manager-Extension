@@ -5,6 +5,10 @@
         "jquery": true
     },
     "root": true,
+    "globals": {
+      "self": "readonly",
+      "chrome": "readonly"
+    },
     "ignorePatterns": ["**/autoconsent/**"]
 }
 

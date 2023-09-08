@@ -403,5 +403,5 @@ const pdkFunction = function () {
   return pdk
 }
 
-var pdk = pdkFunction()
-export default pdk;
+const pdk = pdkFunction()
+export default pdk

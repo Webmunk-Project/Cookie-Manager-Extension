@@ -1,4 +1,4 @@
-var config = {
+const config = {
   primaryColor: '#616161',
   accentColor: '#616161',
   extensionName: 'Cookie Manager',
@@ -7,10 +7,10 @@ var config = {
   enrollUrl: 'https://cookie-enroll.webmunk.org/enroll/enroll.json'
 }
 
-function setConfig(source){
-  for (let p in source){
-    config[p] = source[p];
+function setConfig (source) {
+  for (const p in source) {
+    config[p] = source[p]
   }
 }
 
-export  {config, setConfig};
+export { config, setConfig }

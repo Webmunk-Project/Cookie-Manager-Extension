@@ -6,6 +6,8 @@ const webpack = require('webpack')
 const { config } = require('dotenv')
 const { parsed } = config({ path: `./.env.${process.env.BUILD_ENV}` })
 const WebpackExtensionManifestPlugin = require('webpack-extension-manifest-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
+
 const baseManifest = require("./baseManifest.js");
 const manifestVersion = "3";
 
@@ -134,6 +136,10 @@ module.exports = function config(browser){
     plugins: [
       new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 1,
+      }),
+      new ESLintPlugin({
+        failOnError: true,
+        failOnWarning: true
       }),
       new CopyPlugin({
         patterns: [

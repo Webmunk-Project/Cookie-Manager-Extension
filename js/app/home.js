@@ -1,8 +1,8 @@
 import $ from 'jquery'
-import {config} from "./config";
+import { config } from './config'
 
 const home = {
-  validateIdentifier:function (identifier, success, error) {
+  validateIdentifier: function (identifier, success, error) {
     if (identifier === null || identifier === undefined || identifier.trim() === '') {
       error('E-Mail Required', 'Please enter an e-mail address to continue.')
       return
@@ -40,7 +40,6 @@ const home = {
       }
     })
   }
-};
+}
 
 export default home
-
