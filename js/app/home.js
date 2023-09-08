@@ -1,5 +1,5 @@
 import $ from 'jquery'
-import config from "./config";
+import {config} from "./config";
 
 const home = {
   validateIdentifier:function (identifier, success, error) {

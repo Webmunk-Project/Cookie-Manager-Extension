@@ -1,4 +1,4 @@
-import config from "./config"
+import {config, setConfig} from "./config"
 import pdk from "../lib/passive-data-kit"
 
 self.PDK = pdk;
@@ -30,8 +30,7 @@ chrome.action.onClicked.addListener(function (tab) {
 
 const loadRules = function (tabId) {
   chrome.storage.local.get({ 'cookie-manager-config': null }, function (result) {
-    config = result['cookie-manager-config']
-
+    setConfig(result['cookie-manager-config']);
     if (config !== null && config !== undefined) {
       chrome.scripting.executeScript({
         target: {
@@ -59,8 +58,7 @@ function refreshConfiguration (sendResponse) {
     if (identifier !== undefined && identifier !== '') {
       chrome.storage.local.get({ 'cookie-manager-config': null }, function (result) {
         console.log("config = ",config)
-
-        config = result['cookie-manager-config']
+        setConfig(result['cookie-manager-config']);
 
         if (config['enroll-url'] === undefined) {
           config['enroll-url'] = 'https://cookie-enroll.webmunk.org/enroll/enroll.json'
@@ -225,9 +223,8 @@ const handlerFunctions = {}
 
 function handleMessage (request, sender, sendResponse) {
   if (request.content === 'fetch_configuration') {
-    chrome.storage.local.get({ 'cookie-manager-config': null }, function (result) {
-      config = result['cookie-manager-config']
-
+    chrome.storage.local.get({ 'cookie-manager-config': null }, (result) => {
+      setConfig(result['cookie-manager-config']);
       sendResponse(config)
     })
 
@@ -308,12 +305,7 @@ const uploadAndRefresh = function (alarm) {
 
   chrome.storage.local.get({ 'cookie-manager-config': null }, function (result) {
     console.log("config = ",config)
-
-    //config = result['cookie-manager-config']
-    for (p in result['cookie-manager-config']){
-      console.log("prop:"+p)
-      config[p] = result[p];
-    }
+    setConfig(result['cookie-manager-config']);
     console.log('[Cookie Manager] Uploading queued data points...')
 
     self.PDK.persistDataPoints(function () {

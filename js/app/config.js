@@ -7,4 +7,10 @@ var config = {
   enrollUrl: 'https://cookie-enroll.webmunk.org/enroll/enroll.json'
 }
 
-export default config;
+function setConfig(source){
+  for (let p in source){
+    config[p] = source[p];
+  }
+}
+
+export  {config, setConfig};

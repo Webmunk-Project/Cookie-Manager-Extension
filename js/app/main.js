@@ -1,7 +1,7 @@
 /* global requirejs, chrome */
 
 // const PDK_TOTAL_UPLOADED = 'pdk-total-uploaded'
-import config from "./config";
+import {config} from "./config";
 import pdk from "../lib/passive-data-kit"
 import $ from 'jquery'
 import {MDCTooltip} from '@material/tooltip';
