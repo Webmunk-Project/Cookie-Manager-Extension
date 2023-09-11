@@ -281,6 +281,7 @@ function handleMessage (request, sender, sendResponse) {
 
   return false
 }
+self.handleMessage = handleMessage
 
 chrome.runtime.onMessage.addListener(handleMessage)
 
