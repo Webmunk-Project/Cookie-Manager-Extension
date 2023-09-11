@@ -1,6 +1,7 @@
 const path = require('path')
 const CopyPlugin = require('copy-webpack-plugin')
 const fs = require("fs")
+var _ = require('lodash')
 
 const webpack = require('webpack')
 const { config } = require('dotenv')
@@ -163,8 +164,8 @@ module.exports = function config(browser){
           extend: {
             "name":baseManifest.name+"_"+(process.env.BUILD_ENV=="development"?"dev":""),
             "manifest_version":parseInt(manifestVersion),
-            "permissions": baseManifest.permissions.concat(buildPermissionsList("permissions")),
-            "host_permissions": baseManifest.host_permissions.concat(buildPermissionsList("host_permissions")),
+            "permissions": buildPermissionsList(baseManifest.permissions,"permissions"),
+            "host_permissions": buildPermissionsList(baseManifest.host_permissions,"host_permissions"),
             "modules": process.env.BUILD_ENV=="production"? undefined: baseManifest.key,
             "key": undefined,
           }
@@ -173,13 +174,17 @@ module.exports = function config(browser){
     ]
   }
 }
-function buildPermissionsList(field){
-  let permissionsList = [];
+function buildPermissionsList(basePermissions,field){
+  let permissionsSet = new Set();
   baseManifest.modules.forEach(m => {
     let moduleManifest = require("./"+m+"/module.json");
-    permissionsList = permissionsList.concat(moduleManifest[field])
+    moduleManifest[field].forEach(p => {
+      !basePermissions.includes(p) && permissionsSet.add(p)
+    })
   });
-  return permissionsList;
+  console.log("final Permissions ",Array.from(permissionsSet))
+  return Array.from(permissionsSet);
+
 }
 // read files to be copied
 function buildImageList(){
