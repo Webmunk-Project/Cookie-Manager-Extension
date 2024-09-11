@@ -44,10 +44,10 @@ requirejs(['material', 'moment', 'pdk', 'jquery'], function (mdc, moment, pdk) {
 
       $('#extensionTitle').html('Cookie Manager')
 
-      $('#actionReloadRules').show()
-      $('#actionInspectRules').show()
+      $('#actionReloadRules').hide()
+      $('#actionInspectRules').hide()
       $('#actionUploadData').show()
-      $('#actionOpenSettings').show()
+      $('#actionOpenSettings').hide()
       $('#actionCloseScreen').hide()
 
       $('.main-ui-button').show()
@@ -61,9 +61,6 @@ requirejs(['material', 'moment', 'pdk', 'jquery'], function (mdc, moment, pdk) {
       })
 
       chrome.storage.local.get({ 'pdk-last-upload': '' }, function (result) {
-        console.log('pdk-last-upload')
-        console.log(result)
-
         if (result['pdk-last-upload'] === '') {
           $('#valueLastUpload').text('Never')
         } else {
@@ -377,12 +374,7 @@ requirejs(['material', 'moment', 'pdk', 'jquery'], function (mdc, moment, pdk) {
         let initialPendingItems = -1
 
         chrome.runtime.sendMessage({ content: 'fetch_configuration' }, function (extensionConfig) {
-          console.log('1: ')
-          console.log(extensionConfig)
-
           pdk.uploadQueuedDataPoints(extensionConfig['upload-url'], extensionConfig.key, function (pendingItems) {
-            console.log('2: ')
-            console.log(extensionConfig)
             let completed = 0
 
             if (initialPendingItems < 0) {

@@ -19,3 +19,6 @@
 [submodule "modules/quick-survey"]
 	path = modules/quick-survey
 	url = https://github.com/Webmunk-Project/Quick-Survey-Module.git
+[submodule "modules/browser-history"]
+	path = modules/browser-history
+	url = https://github.com/Webmunk-Project/Browser-History-Module.git

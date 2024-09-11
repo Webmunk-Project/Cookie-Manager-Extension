@@ -1,10 +1,58 @@
-/* global MutationObserver, FileReader */
+/* global MutationObserver, FileReader, chrome */
+
+$.expr.pseudos.icontains = $.expr.createPseudo(function (queryString) {
+  let maxLength = null
+
+  if (queryString.endsWith('"') === false) {
+      let lastIndex = queryString.lastIndexOf(',')
+
+      let remainder = queryString.slice(lastIndex + 1)
+
+      queryString = queryString.slice(0, lastIndex)
+
+      maxLength = parseInt(remainder)
+  }
+
+  if (queryString[0] == '"') {
+    queryString = queryString.slice(1)
+  }
+
+  if (queryString.endsWith('"')) {
+    queryString = queryString.slice(0, -1)
+  }
+
+  const queryUpper = queryString.toUpperCase()
+
+  return function (elem) {
+    let elementText = $(elem).text().replace(/\s+/g, ' ').trim()
+
+    if (elementText.length == 0) {
+      return false
+    }
+
+    elementText = elementText.toUpperCase()
+
+    if (maxLength !== null && elementText.length > maxLength) {
+      return false
+    }
+
+    const lessThan = elementText.length > maxLength
+
+    // console.log(`[Cookie Manager] TEST ${elem.tagName} -- ${queryUpper} in ${elementText}`)
+
+    if (elementText.includes(queryUpper)) {
+      return true
+    }
+    
+    return false
+  }
+});
 
 (function () {
   if (window.cookieManagerExtensionInitialized !== undefined) {
     return
   }
-
+  
   window.cookieManagerExtensionInitialized = new Date().getTime()
 
   const cookieManagerModuleCallbacks = []
@@ -22,6 +70,10 @@
   }
 
   window.cookieManagerPopulateContent = function (url, title, container, key, complete) {
+    if (title === null || title === undefined || title === '') {
+      title = 'untitled-item'
+    }
+
     const blobToBase64 = blob => { // eslint-disable-line no-unused-vars
       const reader = new FileReader()
 
@@ -79,6 +131,28 @@
   }
 
   if (['http:', 'https:'].includes(window.location.protocol)) {
+    console.log(`[Cookie Manager] Refresh configuration? ${window.location}`)
+
+    if (window.location.hostname === 'cookie-enroll.webmunk.org') {
+      console.log('[Cookie Manager] Refreshing configuration after config switch...')
+
+      chrome.storage.local.get({ 'pdk-identifier': '' }, function (result) {
+        if (result['pdk-identifier'] !== '') {
+          const payload = {
+            // identifier: result['pdk-identifier']
+          }
+
+          console.log(`[Cookie Manager] Got identifier: ${payload.identifier}...`)
+
+          console.log('[Cookie Manager] Refreshing configuration after config switch...')
+          chrome.runtime.sendMessage({
+            content: 'refresh_configuration',
+            payload: payload
+          })
+        }
+      })
+    }
+
     function locationFilterMatches (location, filters) { // eslint-disable-line no-unused-vars
       let hostMatch = false
       let pathMatch = true
@@ -140,11 +214,13 @@
 
     console.log('[Cookie Manager] ' + cookieManagerModuleCallbacks.length + ' extension(s) ready.')
 
-    for (const callback of cookieManagerModuleCallbacks) {
-      const config = {}
+    chrome.storage.local.get({ 'cookie-manager-config': {} }, function (result) {
+      const moduleConfig = result['cookie-manager-config']
 
-      callback(config)
-    }
+      for (const callback of cookieManagerModuleCallbacks) {
+        callback(moduleConfig)
+      }
+    })
 
     const config = {
       subtree: true,
@@ -159,7 +235,7 @@
     let finalTimeout = null
 
     const changeFunction = function () {
-      console.log('[Cookie Manager] Page update')
+      // console.log('[Cookie Manager] Page update')
 
       for (const listener of cookieManagerPageChangeListeners) {
         listener()

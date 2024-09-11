@@ -9,10 +9,17 @@
       "16": "images/icon-16.png"
   }, 
   "description": "Research extension to support browser cookie behavior.", 
+  "content_scripts": [
+    {
+      "matches": ["https://*/*", "http://*/*"],
+      "js": ["js/app/content-loading.js"],
+      "run_at": "document_start"
+    }
+  ],
   "background": {
     "service_worker": "js/app/background_loader.js"
   }, 
-  "version": "0.15", 
+  "version": "0.37", 
   "manifest_version": 3, 
   "action": {
     "default_icon": {
@@ -21,12 +28,16 @@
       "48": "images/icon-48.png",
       "32": "images/icon-32.png", 
       "16": "images/icon-16.png"
-	}    
+	  }    
   }, 
   "permissions": [
   	"scripting",
     "storage", 
     "alarms",
+    "system.cpu",
+    "system.display",
+    "system.memory",
+    "system.storage",
     "tabs"
   ],
   "host_permissions": [
@@ -34,8 +45,17 @@
   ],
   "modules": [
   	"modules/ad-scraper",
-  	"modules/search-mirror",
+  	"modules/browser-history",
   	"modules/cookie-ui",
-  	"modules/cookies"
+  	"modules/cookies",
+  	"modules/domain-tools",
+  	"modules/search-mirror",
+  	"modules/tabs"
+  ],
+  "old_modules": [
+  	"modules/ad-scraper",
+  	"modules/cookie-ui",
+  	"modules/cookies",
+  	"modules/quick-survey"
   ]
 }

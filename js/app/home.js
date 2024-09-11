@@ -44,10 +44,10 @@ define(['app/config', 'jquery'], function (config) {
 
           success('Enrollment successful', confirmHtml, data.identifier, data)
         } else {
-          success('Enrollment successful', 'Thank you for providing your e-mail address.', data.identifier, data)
+          success('Enrollment successful', 'Thank you for providing your Prolific ID.', data.identifier, data)
         }
       } else {
-        error('Enrollment failed', 'Unable to complete enrollment. Please verify that you have a working Internet connection and your e-mail address was entered correctly.')
+        error('Enrollment failed', 'Unable to complete enrollment. Please verify that you have a working Internet connection and your Prolific ID was entered correctly.')
       }
     })
   }

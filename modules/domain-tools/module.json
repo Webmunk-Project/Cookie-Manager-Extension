@@ -1,0 +1,10 @@
+{
+  "name": "Domain Tools", 
+  "content_include": [
+    "js/domain-rules.json"
+  ],
+  "service_worker_scripts": [
+    "js/worker.js"
+  ], 
+  "content_scripts": []
+}

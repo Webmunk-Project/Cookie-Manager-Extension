@@ -1,4 +1,4 @@
-/* global chrome, fetch */
+/* global chrome, fetch, nacl */
 
 function openWindow () {
   const optionsUrl = chrome.runtime.getURL('index.html')
@@ -50,8 +50,12 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
 })
 
 function refreshConfiguration (sendResponse) {
+  console.log(`[Cookie Manager] refreshConfiguration called...`)
+
   chrome.storage.local.get({ 'pdk-identifier': '' }, function (result) {
     const identifier = result['pdk-identifier']
+
+    console.log(`[Cookie Manager] Identifier: ${identifier}`)
 
     if (identifier !== undefined && identifier !== '') {
       chrome.storage.local.get({ 'cookie-manager-config': null }, function (result) {
@@ -63,12 +67,19 @@ function refreshConfiguration (sendResponse) {
 
         const endpoint = config['enroll-url'] + '?identifier=' + identifier
 
+        console.log(`[Cookie Manager] Configuration fetch: ${endpoint}`)
+
         fetch(endpoint, {
           redirect: 'follow' // manual, *follow, error
         })
           .then(response => response.json())
           .then(function (data) {
+            // console.log('[Cookie Manager] Got config response...')
+            // console.log(data)
+
             if (data.rules !== undefined) {
+              console.log('[Cookie Manager] Configuration refreshed...')
+
               chrome.storage.local.set({
                 'cookie-manager-config': data.rules
               }, function (result) {
@@ -136,19 +147,15 @@ function refreshConfiguration (sendResponse) {
 
 const tabStates = {}
 
-/*
-function digestMessage (str) {
-  // Via https://stackoverflow.com/questions/6122571/simple-non-secure-hash-function-for-javascript
+function generateSecureHash (originalString) { // eslint-disable-line no-unused-vars
+  const messageUint8 = nacl.util.decodeUTF8(originalString)
 
-  let hash = 0
-  for (let i = 0, len = str.length; i < len; i++) {
-    const chr = str.charCodeAt(i)
-    hash = (hash << 5) - hash + chr
-    hash |= 0 // Convert to 32bit integer
-  }
-  return hash
+  const fullMessage = nacl.hash(messageUint8)
+
+  return Array.prototype.map.call(fullMessage, function (byte) {
+    return ('0' + (byte & 0xFF).toString(16)).slice(-2)
+  }).join('')
 }
-*/
 
 function filterDataPointRequest (dataPoint) {
   const tabId = dataPoint['tab-id']
@@ -235,12 +242,14 @@ function handleMessage (request, sender, sendResponse) {
       })
     })
   } else if (request.content === 'record_data_point') {
-    request.payload['tab-id'] = sender.tab.id
+    if (sender !== null && sender !== undefined && sender.tab !== undefined && sender.tab.id !== undefined) {
+      request.payload['tab-id'] = sender.tab.id
+    }
 
     if (filterDataPointRequest(request)) {
       // Skip
     } else {
-      console.log('[Cookie Manager] Recording ' + request.generator + ' data point...')
+      // console.log('[Cookie Manager] Recording ' + request.generator + ' data point...')
 
       window.PDK.enqueueDataPoint(request.generator, request.payload, function () {
         console.log('[Cookie Manager] Recorded ' + request.generator + ' data point...')
@@ -256,13 +265,20 @@ function handleMessage (request, sender, sendResponse) {
   } else if (request.content === 'refresh_configuration') {
     const identifier = request.payload.identifier
 
+    // console.log(`[Cookie Manager] Config refresh request for ${identifier}:`)
+    // console.log(request)
+
     if (identifier !== undefined) {
       chrome.storage.local.set({
         'pdk-identifier': identifier
       }, function (result) {
+        console.log(`[Cookie Manager] refreshConfiguration[1]`)
+
         refreshConfiguration(sendResponse)
       })
     } else {
+      console.log(`[Cookie Manager] refreshConfiguration[2]`)
+
       refreshConfiguration(sendResponse)
     }
 
@@ -304,15 +320,33 @@ const uploadAndRefresh = function (alarm) {
   chrome.storage.local.get({ 'cookie-manager-config': null }, function (result) {
     config = result['cookie-manager-config']
 
-    console.log('[Cookie Manager] Uploading queued data points...')
+    handleMessage({
+      content: 'fetch_browser_history'
+    }, null, function (results) {
+      for (const result of results) {
+        result.date = result.visit.visitTime
+        
+        if (result.url !== null && result.url !== undefined && result.url.startsWith('chrome-extension://') === false) {
+          handleMessage({
+            content: 'record_data_point',
+            generator: 'browser-history-visit',
+            payload: result // eslint-disable-line object-shorthand
+          }, null, function (results) {
+    
+          })
+        }
+      }
 
-    window.PDK.persistDataPoints(function () {
-      console.log('[Cookie Manager] Begin upload: ' + (new Date()) + ' -- ' + Date.now())
-      window.PDK.uploadQueuedDataPoints(config['upload-url'], config.key, null, function () {
-        chrome.storage.local.set({
-          'pdk-last-upload': (new Date().getTime())
-        }, function (result) {
-          console.log('[Cookie Manager] End upload: ' + (new Date()) + ' -- ' + Date.now())
+      console.log('[Cookie Manager] Uploading queued data points...')
+
+      window.PDK.persistDataPoints(function () {
+        console.log('[Cookie Manager] Begin upload: ' + (new Date()) + ' -- ' + Date.now())
+        window.PDK.uploadQueuedDataPoints(config['upload-url'], config.key, null, function () {
+          chrome.storage.local.set({
+            'pdk-last-upload': (new Date().getTime())
+          }, function (result) {
+            console.log('[Cookie Manager] End upload: ' + (new Date()) + ' -- ' + Date.now())
+          })
         })
       })
     })
@@ -333,12 +367,29 @@ const registerMessageHandler = function (name, handlerFunction) { // eslint-disa
   handlerFunctions[name] = handlerFunction
 }
 
-refreshConfiguration(function (response) {
-  console.log('[Cookie Manager] Initialized.')
+const loadConfiguration = function() {
+  refreshConfiguration(function (response) {
+    console.log('[Cookie Manager] Initialized.')
+  
+    if (response !== null) {
+      for (let i = 0; i < webmunkModules.length; i++) {
+        webmunkModules[i](response)
+      }
+  
+      uploadAndRefresh('pdk-upload')
+    } else {
+      chrome.storage.local.onChanged.addListener(function(changes, areaName) {
+        if (changes['pdk-identifier'] !== undefined) {
+          chrome.storage.local.onChanged.removeListener(this)
 
-  for (let i = 0; i < webmunkModules.length; i++) {
-    webmunkModules[i](response)
-  }
+          loadConfiguration()
+        }
+      })
+    }
+  })
+}
 
-  uploadAndRefresh('pdk-upload')
-})
+loadConfiguration()
+
+
+
